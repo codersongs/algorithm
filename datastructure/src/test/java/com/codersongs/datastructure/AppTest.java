@@ -1,4 +1,4 @@
-package com.codersongs;
+package com.codersongs.datastructure;
 
 import static org.junit.Assert.assertTrue;
 

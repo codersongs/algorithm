@@ -22,6 +22,11 @@
     </properties>
 
     <dependencies>
+    	<dependency>
+	      <groupId>com.codersongs</groupId>
+	      <artifactId>common</artifactId>
+	      <version>1.0-SNAPSHOT</version>
+	    </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
