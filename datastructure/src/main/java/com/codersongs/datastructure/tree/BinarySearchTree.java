@@ -75,7 +75,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
 	 * @param newEntry
 	 * @return
 	 */
-	private T addEntry(BinaryNode<T> rootNode, T newEntry) {
+	protected T addEntry(BinaryNode<T> rootNode, T newEntry) {
 		assert rootNode != null;
 		T result = null;
 		int compareTo = newEntry.compareTo(rootNode.getData());

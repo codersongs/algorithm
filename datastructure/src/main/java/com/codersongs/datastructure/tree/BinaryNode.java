@@ -74,14 +74,14 @@ public class BinaryNode<T> {
 	/**
 	 * @return
 	 */
-	public int getHight(){
-		return getHight(this);
+	public int getHeight(){
+		return getHeight(this);
 	}
 	
-	private int getHight(BinaryNode<T> node){
+	private int getHeight(BinaryNode<T> node){
 		int height = 0;
 		if (node != null) {
-			height = 1 + Math.max(getHight(node.getLeftChild()), getHight(node.getRightChild()));
+			height = 1 + Math.max(getHeight(node.getLeftChild()), getHeight(node.getRightChild()));
 		}
 		return height;
 	}

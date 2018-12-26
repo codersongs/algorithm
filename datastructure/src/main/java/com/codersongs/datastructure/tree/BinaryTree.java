@@ -44,7 +44,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
 	
 	@Override
 	public int getHight() {
-		return root.getHight();
+		return root.getHeight();
 	}
 
 	@Override
