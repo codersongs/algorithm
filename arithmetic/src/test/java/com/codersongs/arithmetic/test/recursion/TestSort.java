@@ -14,7 +14,12 @@ import com.codersongs.arithmetic.sort.SortUtils;
  *
  */
 public class TestSort {
-	public int[] array;
+	private int[] array;
+	
+	@Test
+	public void testRadixSort(){
+		SortUtils.radixSort(array, 2);
+	}
 	
 	@Test
 	public void testQuickSort(){
@@ -52,7 +57,7 @@ public class TestSort {
 	
 	@Before
 	public void initArray(){
-		array = RandomUtils.randomIntArray(10, 0, 100);
+		array = RandomUtils.randomIntArray(10, 0, 99);
 		IteratorUtils.traverseIntArray(array);
 	}
 	

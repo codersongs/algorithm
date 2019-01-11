@@ -14,9 +14,33 @@ public class SortUtils {
 	/**
 	 * 基数排序
 	 * @param array
+	 * @param d
 	 */
-	public static void radixSort(int[] array){
-		
+	public static void radixSort(int[] array, int d){
+		int[][] tmp = new int[10][array.length];
+		int[] order = new int[10];
+		int index = 0;
+		int digit = 1;
+		int divisor = 1;
+		while(digit <= d){
+			for (int i = 0; i < array.length; i++) {
+				int lsd = (array[i] / divisor) % 10;
+				tmp[lsd][order[lsd]] = array[i];
+				order[lsd]++;
+			}
+			for (int i = 0; i < 10; i++) {
+				if (order[i] != 0) {
+					for (int j = 0; j < order[i]; j++) {
+						System.out.println(index);
+						array[index++] = tmp[i][j];
+					}
+					order[i] = 0;
+				}
+			}
+			digit++;
+			divisor *= 10;
+			index = 0;
+		}
 	}
 	
 	/**
