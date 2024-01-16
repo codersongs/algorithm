@@ -2,6 +2,9 @@ package com.codersongs.algorithm.solution;
 
 import com.codersongs.algorithm.common.ListNode;
 
+/**
+ * 解决方案
+ */
 public class AlgorithmSolution {
     public static void main(String[] args) {
         AlgorithmSolution solution = new AlgorithmSolution();
