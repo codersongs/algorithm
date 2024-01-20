@@ -1,6 +1,7 @@
 package com.codersongs.algorithm.solution;
 
-import com.codersongs.algorithm.common.ListNode;
+
+import com.codersongs.algorithm.common.TreeNode;
 
 /**
  * 解决方案
@@ -8,16 +9,25 @@ import com.codersongs.algorithm.common.ListNode;
 public class AlgorithmSolution {
     public static void main(String[] args) {
         AlgorithmSolution solution = new AlgorithmSolution();
-        System.out.println(ListNode.toString(solution.reverseList(ListNode.generateByArray(1,2,3))));
+        System.out.println(solution.isBalanced(TreeNode.arrayToTreeNode(new Integer[]{1,2,2,3,3,null,null,4,4})));
     }
 
-    public ListNode reverseList(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
+    public boolean res = true;
+    public boolean isBalanced(TreeNode root) {
+        level(root);
+        return res;
+    }
+
+    public int level(TreeNode root) {
+        if (root == null || !res) {
+            return 0;
         }
-        ListNode newHead = reverseList(head.next);
-        head.next.next = head;
-        head.next = null;
-        return newHead;
+        int left = 1 + level(root.left);
+        int right =  1 + level(root.right);
+        if (Math.abs(left - right) >= 2) {
+            res = false;
+            return 0;
+        }
+        return Math.max(left, right);
     }
 }
