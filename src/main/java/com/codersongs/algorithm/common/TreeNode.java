@@ -1,10 +1,7 @@
 package com.codersongs.algorithm.common;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
