@@ -2,6 +2,9 @@ package com.codersongs.algorithm.solution;
 
 
 import com.codersongs.algorithm.common.TreeNode;
+import com.google.common.collect.Lists;
+
+import java.util.*;
 
 /**
  * 解决方案
@@ -9,25 +12,37 @@ import com.codersongs.algorithm.common.TreeNode;
 public class AlgorithmSolution {
     public static void main(String[] args) {
         AlgorithmSolution solution = new AlgorithmSolution();
-        System.out.println(solution.isBalanced(TreeNode.arrayToTreeNode(new Integer[]{1,2,2,3,3,null,null,4,4})));
+        TreeNode treeNode = TreeNode.arrayToTreeNode(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8});
+        TreeNode.show(treeNode);
+        System.out.println(solution.preorderTraversal(treeNode));
     }
 
-    public boolean res = true;
-    public boolean isBalanced(TreeNode root) {
-        level(root);
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            res.add(cur.val);
+            if (cur.right != null) {
+                stack.push(cur.right);
+            }
+            if (cur.left != null) {
+                stack.push(cur.left);
+            }
+        }
         return res;
     }
 
-    public int level(TreeNode root) {
-        if (root == null || !res) {
-            return 0;
+    private void dfs(TreeNode root, List<Integer> res) {
+        if (root == null) {
+            return;
         }
-        int left = 1 + level(root.left);
-        int right =  1 + level(root.right);
-        if (Math.abs(left - right) >= 2) {
-            res = false;
-            return 0;
-        }
-        return Math.max(left, right);
+        res.add(root.val);
+        dfs(root.left, res);
+        dfs(root.right, res);
     }
 }

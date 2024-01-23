@@ -1,9 +1,10 @@
 package com.codersongs.algorithm.common;
 
 
-import cn.hutool.extra.template.engine.freemarker.FreemarkerTemplate;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -181,5 +182,20 @@ public class TreeNode {
 
     private static int getTreeDepth(TreeNode root) {
         return root == null ? 0 : (1 + Math.max(getTreeDepth(root.left), getTreeDepth(root.right)));
+    }
+
+    public static List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        dfs(root, res);
+        return res;
+    }
+
+    private static void dfs(TreeNode root, List<Integer> res) {
+        if (root == null) {
+            return;
+        }
+        res.add(root.val);
+        dfs(root.left, res);
+        dfs(root.right, res);
     }
 }
