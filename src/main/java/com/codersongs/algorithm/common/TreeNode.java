@@ -1,6 +1,8 @@
 package com.codersongs.algorithm.common;
 
 
+import cn.hutool.extra.template.engine.freemarker.FreemarkerTemplate;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -30,8 +32,10 @@ public class TreeNode {
     }
 
     public static void main(String[] args) {
-        show(arrayToTreeNode(new Integer[]{1,2,2,3,3,null,null,4,4}));
+        show(arrayToTreeNode(new Integer[]{1,2,2,3,3,3,3,4,4,5,5,null,6,7,7,4,4,5,5,6,6,7,7,4,4,5,5,6,6,7,7}));
+        show(arrayToTreeNode(new Integer[]{1}));
     }
+
     public static TreeNode arrayToTreeNode(Integer[] array){
         if(array.length == 0){
             return null;
@@ -39,22 +43,21 @@ public class TreeNode {
         TreeNode root = new TreeNode(array[0]);
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
-        boolean isLeft = true;
-        for(int i = 1; i < array.length; i++){
-            TreeNode node = queue.peek();
-            if(isLeft){
-                if(array[i] != null){
-                    node.left = new TreeNode(array[i]);
-                    queue.offer(node.left);
-                }
-                isLeft = false;
-            }else {
-                if(array[i] != null){
-                    node.right = new TreeNode(array[i]);
-                    queue.offer(node.right);
-                }
-                queue.poll();
-                isLeft = true;
+        int i = 1;
+        while (i < array.length) {
+            TreeNode cur = queue.poll();
+            Integer left = array[i++];
+            if (left != null) {
+                cur.left = new TreeNode(left);
+                queue.offer(cur.left);
+            }
+            if (i >= array.length) {
+                break;
+            }
+            Integer right = array[i++];
+            if (right != null) {
+                cur.right = new TreeNode(right);
+                queue.offer(cur.right);
             }
         }
         return root;
@@ -73,10 +76,12 @@ public class TreeNode {
         // 得到树的深度
         int treeDepth = getTreeDepth(root);
 
+
         // 最后一行的宽度为2的（n - 1）次方乘3，再加1
         // 作为整个二维数组的宽度
         int arrayHeight = treeDepth * 2 - 1;
-        int arrayWidth = (2 << (treeDepth - 2)) * 3 + 1;
+        int arrayWidth = Math.max(((2 << (treeDepth - 2)) - 1) * 4 + 1, 1);
+
         // 用一个字符串数组来存储每个位置应显示的元素
         String[][] res = new String[arrayHeight][arrayWidth];
         // 对数组进行初始化，默认为一个空格
@@ -85,10 +90,13 @@ public class TreeNode {
                 res[i][j] = " ";
             }
         }
-
+        int[] gapArray = new int[treeDepth];
+        gapArray[0] = 3;
+        for (int i = 1; i < treeDepth; i++) {
+            gapArray[i] = gapArray[i-1] * 2 + 1;
+        }
         // 从根节点开始，递归处理整个树
-        // res[0][(arrayWidth + 1)/ 2] = (char)(root.val + '0');
-        writeArray(root, 0, arrayWidth / 2, res, treeDepth);
+        writeArray(root, 0, arrayWidth / 2, res, treeDepth, gapArray);
 
         // 此时，已经将所有需要显示的元素储存到了二维数组中，将其拼接并打印即可
         for (String[] line : res) {
@@ -103,29 +111,71 @@ public class TreeNode {
         }
     }
 
-    private static void writeArray(TreeNode currNode, int rowIndex, int columnIndex, String[][] res, int treeDepth) {
-        // 保证输入的树不为空
-        if (currNode == null) return;
-        // 先将当前节点保存到二维数组中
+    /**
+     * f(n) = f(n-1) * 2 + 1
+     * @param currNode
+     * @param rowIndex
+     * @param columnIndex
+     * @param res
+     * @param treeDepth
+     */
+    private static void writeArray(TreeNode currNode, int rowIndex, int columnIndex, String[][] res, int treeDepth, int[] gapArray) {
+        if (currNode == null) {
+            return;
+        }
         res[rowIndex][columnIndex] = String.valueOf(currNode.val);
 
-        // 计算当前位于树的第几层
-        int currLevel = ((rowIndex + 1) / 2);
-        // 若到了最后一层，则返回
-        if (currLevel == treeDepth) return;
+        int currLevel = (rowIndex + 1) >> 1;
+        if (currLevel == treeDepth) {
+            return;
+        }
+        // 计算当前行到下一行，每个元素之间的间隔（下一行的列索引与当前元素的列索引之间的间隔）
+        int index = treeDepth - currLevel - 1 - 1;
+        if (index < 0){
+            index = 0;
+        }
+        int gap = gapArray[index];
+
+        if (currNode.left != null) {
+            res[rowIndex + 1][columnIndex - (gap + 1 >> 2)] = "/";
+            writeArray(currNode.left, rowIndex + 2, columnIndex - (gap >> 1) - 1, res, treeDepth, gapArray);
+        }
+
+        if (currNode.right != null) {
+            res[rowIndex + 1][columnIndex + (gap + 1 >> 2)] = "\\";
+            writeArray(currNode.right, rowIndex + 2, columnIndex + (gap >> 1)  + 1, res, treeDepth, gapArray);
+        }
+    }
+
+
+    /**
+     * @param currNode
+     * @param rowIndex
+     * @param columnIndex
+     * @param res
+     * @param treeDepth
+     */
+    private static void writeArray1(TreeNode currNode, int rowIndex, int columnIndex, String[][] res, int treeDepth) {
+        if (currNode == null) {
+            return;
+        };
+        res[rowIndex][columnIndex] = String.valueOf(currNode.val);
+
+        int currLevel = (rowIndex + 1) >> 1;
+        if (currLevel == treeDepth) {
+            return;
+        }
         // 计算当前行到下一行，每个元素之间的间隔（下一行的列索引与当前元素的列索引之间的间隔）
         int gap = treeDepth - currLevel - 1;
 
-        // 对左儿子进行判断，若有左儿子，则记录相应的"/"与左儿子的值
         if (currNode.left != null) {
             res[rowIndex + 1][columnIndex - gap] = "/";
-            writeArray(currNode.left, rowIndex + 2, columnIndex - gap * 2, res, treeDepth);
+            writeArray1(currNode.left, rowIndex + 2, columnIndex - gap * 2, res, treeDepth);
         }
 
-        // 对右儿子进行判断，若有右儿子，则记录相应的"\"与右儿子的值
         if (currNode.right != null) {
             res[rowIndex + 1][columnIndex + gap] = "\\";
-            writeArray(currNode.right, rowIndex + 2, columnIndex + gap * 2, res, treeDepth);
+            writeArray1(currNode.right, rowIndex + 2, columnIndex + gap * 2, res, treeDepth);
         }
     }
 
