@@ -1,4 +1,4 @@
-package com.codersongs.algorithm.solution;
+package com.codersongs.algorithm.design;
 
 import java.util.Deque;
 import java.util.LinkedList;

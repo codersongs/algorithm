@@ -2,10 +2,8 @@ package com.codersongs.algorithm.solution;
 
 
 import com.codersongs.algorithm.common.ListNode;
-import com.codersongs.algorithm.common.TreeNode;
-import com.google.common.collect.Lists;
 
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * 解决方案
@@ -13,18 +11,17 @@ import java.util.*;
 public class AlgorithmSolution {
     public static void main(String[] args) {
         AlgorithmSolution solution = new AlgorithmSolution();
-        TreeNode treeNode = TreeNode.arrayToTreeNode(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8});
-        TreeNode.show(treeNode);
-        System.out.println(solution.getIntersectionNode(null, null));
+        System.out.println(ListNode.toString(solution.reverseList(ListNode.generateByArray(1))));
     }
 
-    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) return null;
-        ListNode pA = headA, pB = headB;
-        while (pA != pB) {
-            pA = pA == null ? headB : pA.next;
-            pB = pB == null ? headA : pB.next;
+    //1->2->3<-4
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
         }
-        return pA;
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
     }
 }
